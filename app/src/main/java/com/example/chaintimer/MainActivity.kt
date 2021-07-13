@@ -2,9 +2,11 @@ package com.example.chaintimer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chaintimer.adapter.ItemAdapter
 import com.example.chaintimer.data.Datasource
+import com.example.chaintimer.model.ChainTimer
 
 /**
  * This activity allows the user to view existing timer and create a new one
@@ -19,12 +21,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Initialize data.
-        val myDataset = Datasource().loadTimers()
+        val data = Datasource()
+        val myDataset = data.loadTimers()
         for(item in myDataset) {
             println(item.toString())
         }
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView.adapter = ItemAdapter(this, myDataset)
+        val adapter = ItemAdapter(this, myDataset)
+        recyclerView.adapter = adapter
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -32,6 +36,10 @@ class MainActivity : AppCompatActivity() {
 
 //        binding = ActivityMainBinding.inflate(layoutInflater)
 //        setContentView(binding.root)
-//        binding.button.setOnClickListener { }
+        val createButton: Button = findViewById(R.id.button)
+        createButton.setOnClickListener {
+            data.addTimer(ChainTimer(3))
+            adapter.notifyItemInserted(data.timers.size-1)
+        }
     }
 }
