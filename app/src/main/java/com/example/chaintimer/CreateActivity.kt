@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.NumberPicker
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chaintimer.data.Datasource
 import com.example.chaintimer.model.ChainTimer
@@ -35,11 +36,14 @@ class CreateActivity : AppCompatActivity() {
         val createButton: Button = findViewById(R.id.create_button)
         createButton.setOnClickListener {
             if (getTime()!=0) {
-                Datasource.addTimer(ChainTimer(getTime().toLong(), getName()))
+                val timer = ChainTimer(getTime().toLong(), getName())
+                Datasource.addTimer(timer)
                 Datasource.adapter.notifyItemInserted(Datasource.timers.size - 1)
                 val context = it.context
                 val intent = Intent(context, MainActivity::class.java)
                 context.startActivity(intent)
+            } else {
+                Toast.makeText(this, "Enter non-zero time", Toast.LENGTH_SHORT).show();
             }
         }
     }
