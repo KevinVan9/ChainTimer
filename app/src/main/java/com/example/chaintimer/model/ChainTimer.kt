@@ -14,7 +14,7 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
             Datasource.updateUI()
         }
         override fun onFinish() {
-            Datasource.updateTimerIndex()
+            Datasource.nextTimer()
         }
     }
     override fun toString(): String {
@@ -28,7 +28,7 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
                 Datasource.updateUI()
             }
             override fun onFinish() {
-                Datasource.updateTimerIndex()
+                Datasource.nextTimer()
             }
         }
         timer.start()
@@ -40,6 +40,7 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
 
     fun reset() {
         elapsedTime = 0
+        timer.cancel()
     }
 
     fun increment() {

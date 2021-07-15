@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             val intent = Intent(it.context, CreateActivity::class.java)
 //            context.startActivity(intent)
-            //Testing
+            // auto add for Testing
             Datasource.addTimer(ChainTimer(4))
-            Datasource.adapter.notifyItemInserted(Datasource.timers.size - 1)
+            adapter.notifyItemInserted(Datasource.timers.size - 1)
         }
 
         // Play/Pause toggle button
@@ -70,16 +70,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // Resumes current timer
     fun startTimer() {
         timers[timerIndex].start()
         recyclerView.scrollToPosition(timerIndex)
         Datasource.adapter.selectedPosition = timerIndex
     }
 
+    // Pauses current timer
     fun pauseTimer() {
         timers[timerIndex].pause()
     }
 
+    // Reset all timers
     fun resetTimers() {
         timers.forEach{ it.reset() }
         Datasource.updateTimerIndex(reset = true)
@@ -87,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         pauseButton.isChecked = false
     }
 
+    // Transition to next timer
     fun nextTimer() {
         timerIndex++
         startTimer()

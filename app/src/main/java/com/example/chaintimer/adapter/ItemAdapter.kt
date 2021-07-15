@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chaintimer.R
@@ -23,6 +24,7 @@ class ItemAdapter(private val context: Context,
     // you provide access to all the views for a data item in a view holder.
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.editTimerName)
+        val progressBar: ProgressBar = view.findViewById(R.id.progressBar)
     }
 
     /**
@@ -42,6 +44,8 @@ class ItemAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
         holder.textView.text = item.toString()
+        holder.progressBar.setProgress((100*item.elapsedTime/item.seconds).toInt())
+        // Highlight current timer
         if(selectedPosition==position)
             holder.itemView.setBackgroundColor(Color.parseColor("#bca0dc"));
         else

@@ -18,14 +18,22 @@ object Datasource {
     fun updateTimerIndex(reset: Boolean = false){
         if(reset) {
             timerIndex = 0
-            updateUI()
+            adapter.selectedPosition = 0
+            updateUI(all = true)
             return
         }
         timerIndex++
-        timerIndex = if (timerIndex>timers.size) 0 else timerIndex
+        timerIndex = if (timerIndex>=timers.size) 0 else timerIndex
+        adapter.selectedPosition = timerIndex
     }
 
-    fun updateUI(){
-        adapter.notifyItemChanged(timerIndex)
+    fun nextTimer() {
+        updateTimerIndex()
+        if(timerIndex!=0) timers[timerIndex].start()
+    }
+
+    fun updateUI(all: Boolean=true){
+        if (all) adapter.notifyDataSetChanged()
+        else adapter.notifyItemChanged(timerIndex)
     }
 }
