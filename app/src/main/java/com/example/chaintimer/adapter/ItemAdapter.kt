@@ -1,6 +1,7 @@
 package com.example.chaintimer.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,7 @@ class ItemAdapter(private val context: Context,
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.item_title)
+        val textView: TextView = view.findViewById(R.id.editTimerName)
     }
 
     /**
@@ -37,9 +38,14 @@ class ItemAdapter(private val context: Context,
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
+    var selectedPosition: Int = 0
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
         holder.textView.text = item.toString()
+        if(selectedPosition==position)
+            holder.itemView.setBackgroundColor(Color.parseColor("#bca0dc"));
+        else
+            holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
     }
 
     /**

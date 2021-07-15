@@ -6,35 +6,84 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+
     <EditText
-        android:id="@+id/timer_name"
+        android:id="@+id/editTimerName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="256dp"
+        android:layout_marginTop="64dp"
         android:hint="@string/name_of_timer"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextTime"
+    <NumberPicker
+        android:id="@+id/editHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="36dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timer_name" />
+        app:layout_constraintTop_toBottomOf="@+id/editTimerName" />
+
+    <NumberPicker
+        android:id="@+id/editMinute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toStartOf="@+id/editSecond"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editHour"
+        app:layout_constraintTop_toBottomOf="@+id/editTimerName" />
+
+    <NumberPicker
+        android:id="@+id/editSecond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTimerName" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/create_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:layout_marginTop="32dp"
+        android:text="@string/create_timer_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTime" />
+        app:layout_constraintTop_toBottomOf="@+id/editMinute" />
+
+    <TextView
+        android:id="@+id/hourLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hour_label"
+        app:layout_constraintBottom_toTopOf="@+id/editHour"
+        app:layout_constraintEnd_toEndOf="@+id/editHour"
+        app:layout_constraintStart_toStartOf="@+id/editHour" />
+
+    <TextView
+        android:id="@+id/minuteLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/minute_label"
+        app:layout_constraintBottom_toTopOf="@+id/editMinute"
+        app:layout_constraintEnd_toEndOf="@+id/editMinute"
+        app:layout_constraintStart_toStartOf="@+id/editMinute" />
+
+    <TextView
+        android:id="@+id/secondLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/second_label"
+        app:layout_constraintBottom_toTopOf="@+id/editSecond"
+        app:layout_constraintEnd_toEndOf="@+id/editSecond"
+        app:layout_constraintStart_toStartOf="@+id/editSecond" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

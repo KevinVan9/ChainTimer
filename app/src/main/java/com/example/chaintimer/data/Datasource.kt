@@ -1,8 +1,10 @@
 package com.example.chaintimer.data
+import com.example.chaintimer.adapter.ItemAdapter
 import com.example.chaintimer.model.ChainTimer
 
-class Datasource {
-    val timers: MutableList<ChainTimer> = mutableListOf<ChainTimer>(ChainTimer(3));
+object Datasource {
+    val timers: MutableList<ChainTimer> = mutableListOf<ChainTimer>(ChainTimer(3, "Default Timer"));
+    lateinit var adapter: ItemAdapter
 
     fun loadTimers(): MutableList<ChainTimer> {
         return timers
@@ -10,6 +12,5 @@ class Datasource {
 
     fun addTimer(timer: ChainTimer) {
         timers.add(timer)
-        println("Created new timer: $timer")
     }
 }
