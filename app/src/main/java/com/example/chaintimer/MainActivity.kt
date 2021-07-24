@@ -1,15 +1,15 @@
 package com.example.chaintimer
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ToggleButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chaintimer.adapter.ItemAdapter
 import com.example.chaintimer.data.Datasource
 import com.example.chaintimer.model.ChainTimer
-import java.util.*
 
 /**
  * This activity allows the user to view existing timer and create a new one
@@ -17,9 +17,11 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    // The view that displays all the timers in the list from DataSource
     lateinit var recyclerView: RecyclerView
+    // Current timer being counted down in list
     var timerIndex = 0
-    var paused: Boolean = true
+
     lateinit var timers: MutableList<ChainTimer>
     lateinit var pauseButton: ToggleButton
     lateinit var addButton: Button
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         // Initialize list of timers
         timers = Datasource.loadTimers()
 
+        // Setup adapter and pass it to relevant classes/objects
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val adapter = ItemAdapter(this, timers)
         recyclerView.adapter = adapter
@@ -45,17 +48,15 @@ class MainActivity : AppCompatActivity() {
         addButton = findViewById(R.id.addButton)
         addButton.setOnClickListener {
             val intent = Intent(it.context, CreateActivity::class.java)
-//            context.startActivity(intent)
-            // auto add for Testing
-            Datasource.addTimer(ChainTimer(4))
-            adapter.notifyItemInserted(Datasource.timers.size - 1)
+            it.context.startActivity(intent)
         }
 
         // Play/Pause toggle button
         //TODO complete logic for toggling with no timers or toggling after completion
         pauseButton = findViewById(R.id.toggleButton)
         pauseButton.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
+            if (timers.size==0) {
+            } else if (isChecked) {
                 startTimer()
             } else {
                 pauseTimer()
@@ -89,12 +90,5 @@ class MainActivity : AppCompatActivity() {
         timerIndex = 0
         pauseButton.isChecked = false
     }
-
-    // Transition to next timer
-    fun nextTimer() {
-        timerIndex++
-        startTimer()
-    }
-
 
 }

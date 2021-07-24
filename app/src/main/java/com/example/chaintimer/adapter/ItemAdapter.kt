@@ -19,6 +19,9 @@ class ItemAdapter(private val context: Context,
                   private val dataset: List<ChainTimer>
                   ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
+    // Variable holding index of current timer in Datasource list
+    var selectedPosition: Int = 0
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
@@ -40,11 +43,11 @@ class ItemAdapter(private val context: Context,
     /**
      * Replace the contents of a view (invoked by the layout manager)
      */
-    var selectedPosition: Int = 0
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataset[position]
+        // Update text and progress bar in UI
         holder.textView.text = item.toString()
-        holder.progressBar.setProgress((100*item.elapsedTime/item.seconds).toInt())
+        holder.progressBar.progress = (100*item.elapsedTime/item.seconds).toInt()
         // Highlight current timer
         if(selectedPosition==position)
             holder.itemView.setBackgroundColor(Color.parseColor("#bca0dc"));
