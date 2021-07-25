@@ -11,6 +11,7 @@ object Datasource {
     var timerIndex = 0
     // adapter set by activity so that adapter selectedPosition can be set. Could just access Datasource timerIndex from ItemAdapter class
     lateinit var adapter: ItemAdapter
+    var timerCount = 0
 
     // Returns list of timers.
     // TODO initialise list from a file for timer storage and return list
@@ -20,8 +21,16 @@ object Datasource {
 
     // Add a given timer to the list
     fun addTimer(timer: ChainTimer) {
-        timers.add(timer)
-        timer.id = timerIndex
+        timer.id = timerCount++
+        if(timers.isNotEmpty() && timers.last().completed()) {
+            println("new one to start")
+            timers.add(timer)
+            updateTimerIndex()
+        } else {
+            timers.add(timer)
+        }
+
+
     }
 
     // Update timer index to the next timer, looping back to start if at the end of list
@@ -32,15 +41,20 @@ object Datasource {
             updateUI(all = true)
             return
         }
+        println(timerIndex.toString())
         timerIndex++
-        timerIndex = if (timerIndex>=timers.size) 0 else timerIndex
+        timerIndex = if(timerIndex>timers.size-1) timers.size-1 else  timerIndex
         adapter.selectedPosition = timerIndex
     }
 
     // Start next timer, updating timer index too
     fun startNextTimer() {
         updateTimerIndex()
-        if(timerIndex!=0) timers[timerIndex].start()
+        startTimer()
+    }
+
+    fun startTimer() {
+        if(timers.size>0 && !timers[timerIndex].completed()) timers[timerIndex].start()
     }
 
     // Get details of next timer
@@ -49,8 +63,31 @@ object Datasource {
     }
 
     // update UI via adapter
-    fun updateUI(all: Boolean=true){
+    fun updateUI(all: Boolean=false){
         if (all) adapter.notifyDataSetChanged()
         else adapter.notifyItemChanged(timerIndex)
+    }
+
+    fun removeTimer(index: Int) {
+        assert(index<timers.size)
+        timers.removeAt(index)
+        if(index <= timerIndex) {
+            updateTimerIndex()
+        }
+    }
+
+    fun moveTimer(fromPos: Int, toPos: Int) {
+        assert(fromPos<timers.size && toPos<timers.size)
+        var toPosShifted: Int = toPos
+        if(fromPos<toPos){
+            toPosShifted = toPos - 1
+        }
+        val item = timers[fromPos]
+        timers.remove(item)
+        timers.add(toPosShifted, item)
+    }
+
+    fun pauseTimer() {
+        timers[timerIndex].pause()
     }
 }

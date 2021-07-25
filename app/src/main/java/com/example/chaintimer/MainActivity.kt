@@ -1,19 +1,23 @@
 package com.example.chaintimer
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.chaintimer.adapter.ItemAdapter
 import com.example.chaintimer.data.Datasource
 import com.example.chaintimer.model.ChainTimer
 
+
 /**
  * This activity allows the user to view existing timer and create a new one
  */
+
+//TODO Add ItemTouchHelper.SimpleCallback for timer deletion and re-ordering
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var pauseButton: ToggleButton
     lateinit var addButton: Button
     lateinit var resetButton: Button
+    lateinit var adapter: ItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,13 +41,16 @@ class MainActivity : AppCompatActivity() {
 
         // Setup adapter and pass it to relevant classes/objects
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        val adapter = ItemAdapter(this, timers)
+        adapter = ItemAdapter(this, timers)
         recyclerView.adapter = adapter
         Datasource.adapter = adapter
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true)
+
+        //Attach ItemHelper
+        mIth.attachToRecyclerView(recyclerView)
 
         // Have 'add' button transition into timer creation activity
         addButton = findViewById(R.id.addButton)
@@ -73,22 +81,56 @@ class MainActivity : AppCompatActivity() {
 
     // Resumes current timer
     fun startTimer() {
-        timers[timerIndex].start()
-        recyclerView.scrollToPosition(timerIndex)
-        Datasource.adapter.selectedPosition = timerIndex
+        assert(timerIndex<timers.size)
+        Datasource.startTimer()
+        recyclerView.scrollToPosition(Datasource.timerIndex)
+//        adapter.selectedPosition = Datasource.timerIndex
     }
 
     // Pauses current timer
     fun pauseTimer() {
-        timers[timerIndex].pause()
+        Datasource.pauseTimer()
+//        if(pauseButton.isChecked) {
+//            pauseButton.isChecked = false
+//        }
     }
 
     // Reset all timers
     fun resetTimers() {
         timers.forEach{ it.reset() }
-        Datasource.updateTimerIndex(reset = true)
-        timerIndex = 0
         pauseButton.isChecked = false
+        Datasource.updateTimerIndex(reset = true)
     }
+
+    // ItemTouchHelper for timer views in recycler enabling swipe to delete and press-drag to move
+    var mIth = ItemTouchHelper(
+        object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: ViewHolder, target: ViewHolder
+            ): Boolean {
+                val fromPos = viewHolder.adapterPosition
+                val toPos = target.adapterPosition
+                // move item in `fromPos` to `toPos` in adapter.
+                // remove from fromPos and insert back into toPos
+                resetTimers()
+                Datasource.moveTimer(fromPos, toPos)
+                adapter.notifyItemMoved(fromPos, toPos)
+                return true // true if moved, false otherwise
+            }
+
+            override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+                // remove from adapter
+                val pos = viewHolder.adapterPosition
+                pauseTimer()
+                Datasource.removeTimer(pos)
+                timerIndex = minOf(timerIndex, timers.size)
+                if(timers.size>0) startTimer()
+                adapter.notifyItemRemoved(pos)
+            }
+        })
 
 }

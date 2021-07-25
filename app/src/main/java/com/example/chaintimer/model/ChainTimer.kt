@@ -29,6 +29,7 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
 
     // Starts timer given the elapsed time
     fun start() {
+        if(completed()) return
         timer = object: CountDownTimer((seconds-elapsedTime)*1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 increment()
@@ -57,6 +58,10 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
     fun increment() {
         elapsedTime++
         Datasource.updateUI()
+    }
+
+    fun completed(): Boolean {
+        return elapsedTime==seconds
     }
 
     /**
