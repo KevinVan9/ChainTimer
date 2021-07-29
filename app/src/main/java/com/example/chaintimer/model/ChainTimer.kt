@@ -11,6 +11,8 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
     // id variable so that timers in list can be uniquely identified
     var id: Int = -1
 
+    var completed: Boolean = false
+
     // initial timer
     var timer = object: CountDownTimer(seconds*1000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
@@ -18,6 +20,7 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
             Datasource.updateUI()
         }
         override fun onFinish() {
+            completed=true
             notification_fun(id, "$name: $seconds seconds completed", "${Datasource.nextTimerDetails()}")
             Datasource.startNextTimer()
         }
@@ -36,6 +39,7 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
                 Datasource.updateUI()
             }
             override fun onFinish() {
+                completed=true
                 notification_fun(id, "$name: $seconds seconds completed", "${Datasource.nextTimerDetails()}")
                 Datasource.startNextTimer()
             }
@@ -50,6 +54,7 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
 
     // Reset the elapsed time and stop the timer
     fun reset() {
+        completed = false
         elapsedTime = 0
         timer.cancel()
     }
@@ -61,7 +66,7 @@ class ChainTimer(val seconds: Long, val name: String = "Timer") {
     }
 
     fun completed(): Boolean {
-        return elapsedTime==seconds
+        return completed
     }
 
     /**

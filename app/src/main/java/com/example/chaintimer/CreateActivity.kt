@@ -53,10 +53,12 @@ class CreateActivity : AppCompatActivity() {
                 val timer = ChainTimer(getTime().toLong(), getName())
                 timer.setNotifications(this::notify)
                 Datasource.addTimer(timer)
-                Datasource.adapter.notifyItemInserted(Datasource.timers.size - 1)
-                val context = it.context
-                val intent = Intent(context, MainActivity::class.java)
-                context.startActivity(intent)
+                println("Position: ${Datasource.timers.size-1}")
+                Datasource.adapter.notifyItemInserted(Datasource.timers.size-1 )
+                finish()
+//                val context = it.context
+//                val intent = Intent(context, MainActivity::class.java)
+//                context.startActivity(intent)
             } else {
                 Toast.makeText(this, "Enter non-zero time", Toast.LENGTH_SHORT).show();
             }

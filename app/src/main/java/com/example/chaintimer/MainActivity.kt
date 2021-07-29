@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         // Have 'add' button transition into timer creation activity
         addButton = findViewById(R.id.addButton)
         addButton.setOnClickListener {
+            pauseButton.isChecked = false
             val intent = Intent(it.context, CreateActivity::class.java)
             it.context.startActivity(intent)
         }
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         pauseButton = findViewById(R.id.toggleButton)
         pauseButton.setOnCheckedChangeListener { _, isChecked ->
             if (timers.size==0) {
+                println("No Timers to Start")
             } else if (isChecked) {
                 startTimer()
             } else {
@@ -125,10 +127,11 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
                 // remove from adapter
                 val pos = viewHolder.adapterPosition
+                pauseButton.isChecked = false
                 pauseTimer()
                 Datasource.removeTimer(pos)
                 timerIndex = minOf(timerIndex, timers.size)
-                if(timers.size>0) startTimer()
+//                if(timers.size>0) startTimer()
                 adapter.notifyItemRemoved(pos)
             }
         })
