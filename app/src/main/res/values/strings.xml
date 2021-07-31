@@ -3,6 +3,7 @@
     <string name="create_timer_text">Create</string>
     <string name="result_text_view">Your roll: %s</string>
     <string name="name_of_timer">Name of Timer</string>
+    <string name="default_timer_name">Timer</string>
     <string name="add_timer_text">Add</string>
     <string name="timer_name_text">Name: %s</string>
     <string name="action_add_timer">Add Timer</string>
@@ -12,4 +13,10 @@
     <string name="reset_label">Reset</string>
     <string name="channel_name">chainTimer channel</string>
     <string name="channel_description">timer notification</string>
+    <string name="highlight_colour">"#bca0dc"</string>
+    <string name="no_highlight_colour">"#ffffff"</string>
+    <string name="notification_description_text">%s: $d seconds completed</string>
+    <string name="timer_description_text">%s: $d/%d seconds</string>
+    <string name="zero_time_timer_toast">Enter non-zero time</string>
+    <string name="no_timers">No timers to start</string>
 </resources>

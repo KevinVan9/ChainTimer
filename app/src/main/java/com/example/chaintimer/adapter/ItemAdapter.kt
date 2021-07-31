@@ -50,9 +50,9 @@ class ItemAdapter(private val context: Context,
         holder.progressBar.progress = (100*item.elapsedTime/item.seconds).toInt()
         // Highlight current timer
         if(selectedPosition==position)
-            holder.itemView.setBackgroundColor(Color.parseColor("#bca0dc"));
+            holder.itemView.setBackgroundColor(Color.parseColor(context.getString(R.string.highlight_colour)));
         else
-            holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+            holder.itemView.setBackgroundColor(Color.parseColor(context.getString(R.string.no_highlight_colour)));
     }
 
     /**

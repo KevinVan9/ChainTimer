@@ -3,6 +3,7 @@ package com.example.chaintimer
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         pauseButton = findViewById(R.id.toggleButton)
         pauseButton.setOnCheckedChangeListener { _, isChecked ->
             if (timers.size==0) {
-                println("No Timers to Start")
+                Toast.makeText(this, getString(R.string.no_timers), Toast.LENGTH_SHORT).show()
             } else if (isChecked) {
                 startTimer()
             } else {
@@ -131,6 +132,7 @@ class MainActivity : AppCompatActivity() {
                 pauseTimer()
                 Datasource.removeTimer(pos)
                 timerIndex = minOf(timerIndex, timers.size)
+                // TODO review the logic
 //                if(timers.size>0) startTimer()
                 adapter.notifyItemRemoved(pos)
             }

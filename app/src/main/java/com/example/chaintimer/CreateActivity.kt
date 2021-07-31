@@ -53,14 +53,10 @@ class CreateActivity : AppCompatActivity() {
                 val timer = ChainTimer(getTime().toLong(), getName())
                 timer.setNotifications(this::notify)
                 Datasource.addTimer(timer)
-                println("Position: ${Datasource.timers.size-1}")
                 Datasource.adapter.notifyItemInserted(Datasource.timers.size-1 )
                 finish()
-//                val context = it.context
-//                val intent = Intent(context, MainActivity::class.java)
-//                context.startActivity(intent)
             } else {
-                Toast.makeText(this, "Enter non-zero time", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.zero_time_timer_toast, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -69,7 +65,8 @@ class CreateActivity : AppCompatActivity() {
     fun getTime() = hourPicker.value*3600 + minutePicker.value*60 + secondPicker.value
 
     //Get Timer name
-    fun getName(): String = if (nameField.text.toString().isBlank()) "Timer" else nameField.text.toString()
+    fun getName(): String = if (nameField.text.toString().isBlank())
+        getString(R.string.default_timer_name) else nameField.text.toString()
 
 
     /**
@@ -85,7 +82,7 @@ class CreateActivity : AppCompatActivity() {
             .setSmallIcon(R.drawable.ic_timer)
             .setContentTitle(title)
             .setContentText(text)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

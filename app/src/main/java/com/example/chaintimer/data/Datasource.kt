@@ -23,7 +23,8 @@ object Datasource {
     fun addTimer(timer: ChainTimer) {
         timer.id = timerCount++
         if(timers.isNotEmpty() && timers.last().completed()) {
-            println("Adding Timer after completed timers")
+            // Case where a timer is added after completed timers so that the current timer index
+                // can be incremented
             timers.add(timer)
             updateTimerIndex()
         } else {
@@ -44,7 +45,6 @@ object Datasource {
         timerIndex++
         timerIndex = if(timerIndex>timers.size-1) timers.size-1 else  timerIndex
         adapter.selectedPosition = timerIndex
-        println("Update $timerIndex")
     }
 
     // Start next timer, updating timer index too
